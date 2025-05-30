@@ -5,6 +5,7 @@ import { OfferStoreService } from '../shared/offer-store.service';
 import { OfferFactory } from '../shared/offer-factory';
 import { Offer } from '../shared/offer';
 import { Course } from '../shared/course';
+import {AuthentificationService} from '../shared/authentification.service';
 
 @Component({
   selector: 'bs-offer-form',
@@ -22,7 +23,8 @@ export class OfferFormComponent implements OnInit {
     private fb: FormBuilder,
     private os: OfferStoreService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthentificationService
   ) {}
 
   ngOnInit() {
@@ -107,7 +109,7 @@ export class OfferFormComponent implements OnInit {
       name: raw.name,
       description: raw.description,
       comment: raw.comment,
-      user_id: 1, // Sicherstellen, dass User mit ID 1 existiert!
+      user_id: this.authService.getCurrentUserId(),
       course: {
         name: raw.course.name,
         subcourses: raw.course.subcourses

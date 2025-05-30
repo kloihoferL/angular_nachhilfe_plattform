@@ -46,5 +46,9 @@ export class OfferListDetailsComponent implements OnInit {
       }
   }
 
+  updatOffer(id: string) {
+
+  }
+
 
 }

@@ -14,5 +14,4 @@ export class OfferListItemComponent {
   //offer = input<Offer>();
 
 
-
 }
