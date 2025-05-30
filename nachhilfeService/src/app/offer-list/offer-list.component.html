@@ -1,0 +1,21 @@
+<h1>Alle Nachhilfeangebote</h1>
+
+
+@for (offer of offers(); track offer.id) {
+  <a class="app-offer-list-item" [offer]="offer" [routerLink]="offer.id">
+  </a>
+}
+
+@if (!offers()) {
+  <p>Loading...</p>
+}
+
+<!--.
+@if (offers() && !offers().length) {
+  <p>Zurzeit sind keine Nachhilfeangebote verfügbar</p>
+
+}-->
+
+
+
+

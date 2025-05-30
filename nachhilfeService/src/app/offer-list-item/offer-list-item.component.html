@@ -1,0 +1,61 @@
+<!--
+@if (offer()) {
+  <div class="p-4 shadow rounded bg-white mb-4 hover:shadow-md transition-shadow">
+    <h2 class="text-lg font-bold">{{ offer().name }}</h2>
+    <p class="text-gray-600">{{ offer().description }}</p>
+  </div>
+}-->
+
+@if (offer()) {
+  <div class="p-4 shadow rounded bg-white mb-4 hover:shadow-md transition-shadow">
+    <h2 class="text-lg font-bold">{{ offer().name }}</h2>
+    <p>{{offer().id}}</p>
+    <p class="text-gray-600 mb-2">{{ offer().description }}</p>
+
+    <!-- Giver Info -->
+    <p class="text-sm text-gray-500">
+      Anbieter: {{ offer().giver?.name }}
+    </p>
+
+    <!-- Course Info -->
+    <p class="text-sm text-gray-500">
+      Fach: {{ offer().course?.name }}
+    </p>
+
+    <!-- Subcourses -->
+    <!--<div class="mt-2">
+      <strong class="text-sm text-gray-700">Themen:</strong>
+      <ul class="list-disc list-inside text-sm text-gray-600">
+        @for (sub of offer().course?.subcourses || []) {
+          <li>{{ sub.name }}</li>
+        }
+      </ul>
+    </div>-->
+
+    <!-- Slots -->
+    <!--<div class="mt-2">
+      <strong class="text-sm text-gray-700">Termine:</strong>
+      <ul class="list-disc list-inside text-sm text-gray-600">
+        @for (slot of offer().slots || []) {
+          <li>{{ slot.start_time }} – {{ slot.end_time }}</li>
+        }
+      </ul>
+    </div>-->
+
+    <!-- Kommentar -->
+    @if (offer().comment) {
+      <p class="text-sm text-gray-500 mt-2">
+        <strong>Kommentar:</strong> {{ offer().comment }}
+      </p>
+    }
+
+    <!-- Gebucht -->
+    <p class="text-sm mt-2">
+      Status:
+      <span class="font-semibold" [class.text-red-500]="offer().booked" [class.text-green-600]="!offer().booked">
+        {{ offer().booked ? 'Vergeben' : 'Frei' }}
+      </span>
+    </p>
+  </div>
+}
+

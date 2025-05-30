@@ -1,0 +1,63 @@
+<form [formGroup]="offerForm" (ngSubmit)="submitForm()" class="space-y-6">
+
+  <!-- Angebotstitel -->
+  <div>
+    <label>Angebotsname</label>
+    <input formControlName="name" class="border p-2 w-full" placeholder="B. Mathe Nachhilfe" />
+  </div>
+
+  <!-- Beschreibung -->
+  <div>
+    <label>Beschreibung</label>
+    <textarea formControlName="description" class="border p-2 w-full"></textarea>
+  </div>
+
+  <!-- Kommentar -->
+  <div>
+    <label>Kommentar</label>
+    <textarea formControlName="comment" class="border p-2 w-full"></textarea>
+  </div>
+
+  <!-- Neuer Kurs -->
+  <div formGroupName="course" class="border p-4 rounded bg-gray-50">
+    <label>Kursname</label>
+    <input formControlName="name" class="border p-2 w-full" placeholder="z.B. Mathematik" />
+
+    <!-- Subkurse -->
+    <div formArrayName="subcourses" class="mt-4 space-y-2">
+      <label>Unterthemen:</label>
+
+      @for (sub of subcourses.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="flex gap-2 items-center">
+          <input formControlName="name" class="border p-2 w-full" placeholder="z.B. Algebra" />
+          <button type="button" (click)="removeSubcourse(i)" class="text-red-500">✕</button>
+        </div>
+      }
+
+      <button type="button" (click)="addSubcourse()" class="text-blue-600 mt-2">+ Unterthema hinzufügen</button>
+    </div>
+
+  </div>
+
+  <!-- Termine -->
+  <div formArrayName="slots" class="mt-6">
+    <label class="block font-semibold">Termine</label>
+
+    @for (slot of slots.controls; let i = $index; track i) {
+      <div [formGroupName]="i" class="flex gap-3 items-center">
+        <input type="datetime-local" formControlName="start_time" class="border p-2 rounded" />
+        <span>bis</span>
+        <input type="datetime-local" formControlName="end_time" class="border p-2 rounded" />
+        <button type="button" (click)="removeSlot(i)" class="text-red-500">✕</button>
+      </div>
+    }
+
+    <button type="button" (click)="addSlot()" class="mt-2 text-cyan-700 hover:underline">
+      + Neuer Termin
+    </button>
+  </div>
+
+
+  <!-- Speichern -->
+  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded mt-6">Angebot speichern</button>
+</form>
