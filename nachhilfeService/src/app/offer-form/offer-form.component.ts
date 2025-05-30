@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { OfferStoreService } from '../shared/offer-store.service';
 import { OfferFactory } from '../shared/offer-factory';
 import { Offer } from '../shared/offer';
@@ -9,11 +9,11 @@ import { Course } from '../shared/course';
 @Component({
   selector: 'bs-offer-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './offer-form.component.html',
   styles: ``
 })
-export class BookFormComponent implements OnInit {
+export class OfferFormComponent implements OnInit {
   offerForm!: FormGroup;
   offer = OfferFactory.empty();
   isUpdatingOffer = false;

@@ -8,7 +8,7 @@ import {Slot} from './slot';
 export class OfferFactory {
 
   static empty():Offer{
-    return new Offer('', '', '', new Course('',''),'',
+    return new Offer('', '', '', new Course('',''),new User('', '', '', ''),
       '', false, [], new Date(), new Date());
   }
 

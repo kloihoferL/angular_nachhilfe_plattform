@@ -35,7 +35,7 @@ export class OfferListDetailsComponent implements OnInit {
           this.os.deleteSingleOffer(this.offer()!.id).subscribe(
             () => {
               this.toastr.success('Das Angebot wurde gelöscht');
-              this.router.navigate(['/offers']);
+              this.router.navigate(['angebote']);
               //alert('Das Angebot wurde gelöscht');
             }, () => {
               this.toastr.error('Das Angebot konnte nicht gelöscht werden');
