@@ -1,24 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { AuthentificationService } from '../shared/authentification.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './navbar.component.html',
   styles: ``
 })
 export class NavbarComponent {
-  isMobileMenuOpen = false;
-  isUserMenuOpen = false;
 
-  constructor(public authService: AuthentificationService) {} // public, damit im Template nutzbar
+  isProfileMenuOpen = false;
 
-
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  constructor(public authService: AuthentificationService, private elementRef: ElementRef) {} // public, damit im Template nutzbar
+  toggleMenu() {
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
   }
 
-  toggleUserMenu() {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
+  closeProfileMenu() {
+    this.isProfileMenuOpen = false;
   }
+
+  // Schließt Menü bei Klick außerhalb
+  onClickOutside(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.closeProfileMenu();
+    }
+  }
+
+
+
 }

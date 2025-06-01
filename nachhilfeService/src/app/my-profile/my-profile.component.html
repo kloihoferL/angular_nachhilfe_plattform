@@ -1,0 +1,103 @@
+<h1 class="text-2xl font-bold mb-6">Mein Account</h1>
+
+<h3 class="text-xl font-semibold mb-4">Meine Buchungen</h3>
+
+@for (booking of bookings(); track booking.id) {
+  <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+    <h4 class="text-xl font-bold text-gray-900 mb-2">{{ booking.offer.name }}</h4>
+
+
+    <div class="mb-3">
+      <div class="flex items-center mb-1 text-gray-800 font-medium">
+        Kurs: <span class="ml-1 font-semibold">{{ booking.offer.course.name }}</span>
+      </div>
+      <div class="ml-6 text-sm text-gray-600">
+        <span class="block font-medium">Gebuchte Unterthemen:</span>
+        <ul class="list-disc ml-4 mt-1">
+          @for (sub of booking.offer.course.subcourses; track sub.id) {
+            <li>
+              {{ sub.name }}
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <div class="flex items-center mb-1 text-gray-800 font-medium">
+        Gebucht von:
+        <span class="ml-1 font-semibold">{{ booking.receiver.name }}</span>
+      </div>
+      <div class="ml-6 text-sm text-gray-600">
+        <p><strong>Ausbildung:</strong> {{ booking.receiver.ausbildung }}</p>
+        <p><strong>E-Mail:</strong> {{ booking.receiver.email }}</p>
+      </div>
+    </div>
+
+    <!-- Slot -->
+    <div>
+      <div class="flex items-center mb-1 text-gray-800 font-medium">
+        Gebuchter Termin
+      </div>
+      <div class="ml-6 text-sm text-gray-600">
+        <p>{{ booking.slot.start_time }} – {{ booking.slot.end_time }}</p>
+      </div>
+    </div>
+  </div>
+
+}
+
+
+<h3>Meine Angebote</h3>
+@for (offer of offers(); track offer.id) {
+  <div class="bg-white p-6 rounded-xl shadow border border-gray-100 mb-4">
+    <h4 class="text-xl font-bold text-gray-900 mb-2">{{ offer.name }}</h4>
+    <p class="text-gray-700 mb-3">{{ offer.description }}</p>
+
+    <div class="mb-3">
+      <div class="flex items-center mb-1 text-gray-800 font-medium">
+        Fach: <span class="ml-1 font-semibold">{{ offer.course.name }}</span>
+      </div>
+      @if (offer.course.subcourses?.length) {
+        <ul class="list-disc ml-6 mt-1">
+          @for (sub of offer.course.subcourses; track sub.id) {
+            <li>{{ sub.name }}</li>
+          }
+        </ul>
+      }
+    </div>
+
+    <div class="mb-3">
+      <div class="flex items-center mb-1 text-gray-800 font-medium">
+        Anbieter: <span class="ml-1 font-semibold">{{ offer.giver.name }}</span>
+      </div>
+      <p class="ml-6 text-sm text-gray-600"><strong>Ausbildung:</strong> {{ offer.giver.ausbildung }}</p>
+      <p class="ml-6 text-sm text-gray-600"><strong>E-Mail:</strong> {{ offer.giver.email }}</p>
+    </div>
+
+    @if (offer.comment) {
+      <p class="text-sm text-gray-600">Kommentar: {{ offer.comment }}</p>
+    }
+
+    <button (click)="removeOffer(offer.id)" class="bg-red-600 text-white p-2 rounded">
+      Angebot löschen
+    </button>
+
+    <button
+      [routerLink]="['/angebote', offer.id, 'edit']"
+      class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+    >
+      Bearbeiten
+    </button>
+
+
+
+  </div>
+
+
+}
+
+
+
+
+

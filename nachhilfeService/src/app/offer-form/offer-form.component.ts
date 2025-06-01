@@ -27,7 +27,7 @@ export class OfferFormComponent implements OnInit {
     private authService: AuthentificationService
   ) {}
 
-  ngOnInit() {
+  /*ngOnInit() {
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isUpdatingOffer = true;
@@ -38,7 +38,23 @@ export class OfferFormComponent implements OnInit {
     } else {
       this.initOffer();
     }
+  }*/
+
+  ngOnInit() {
+    const id = this.route.snapshot.params['id'];
+    if (id) {
+      this.isUpdatingOffer = true;
+      // nur einmal initOffer(), wenn Daten da sind:
+      this.os.getSingle(id).subscribe(offer => {
+        this.offer = offer;
+        this.initOffer();
+      });
+    } else {
+      // Nur beim Erstellen sofort initialisieren
+      this.initOffer();
+    }
   }
+
 
   initOffer() {
     this.offerForm = this.fb.group({
@@ -102,7 +118,7 @@ export class OfferFormComponent implements OnInit {
     this.subcourses.removeAt(index);
   }
 
-  submitForm() {
+  /*submitForm() {
     const raw = this.offerForm.value;
 
     const offerPayload = {
@@ -127,6 +143,59 @@ export class OfferFormComponent implements OnInit {
         console.error('Fehler beim Speichern:', err);
       }
     });
+  }*/
+
+  submitForm() {
+    const raw = this.offerForm.value;
+
+    const offerPayload: Offer = {
+      ...this.offer,
+      name: raw.name,
+      description: raw.description,
+      comment: raw.comment,
+      booked: this.offer.booked ?? false,
+      giver: this.offer.giver,
+      course: {
+        id: this.offer.course.id,
+        name: raw.course.name,
+        subcourses: raw.course.subcourses
+      },
+      slots: raw.slots.filter((s: any) => s.start_time && s.end_time),
+      id: this.offer.id, // wichtig fürs Update
+      created_at: this.offer.created_at,
+      updated_at: this.offer.updated_at
+    };
+
+    if (this.isUpdatingOffer) {
+      this.os.update(offerPayload).subscribe({
+        next: () => {
+          this.router.navigate(['/offers', this.offer.id]);
+          console.log(this.offer);
+        },
+        error: (err) => {
+          console.error('Fehler beim Aktualisieren:', err);
+        }
+      });
+    } else {
+      // Erstellen benötigt user_id separat – Backend muss das Feld erwarten!
+      const createPayload = {
+        ...offerPayload,
+        user_id: this.authService.getCurrentUserId()
+      };
+
+      this.os.create(createPayload).subscribe({
+        next: () => {
+          this.offerForm.reset(OfferFactory.empty());
+          this.offer = OfferFactory.empty();
+          this.router.navigate(['/offers']);
+        },
+        error: (err) => {
+          console.error('Fehler beim Erstellen:', err);
+        }
+      });
+    }
   }
+
+
 
 }

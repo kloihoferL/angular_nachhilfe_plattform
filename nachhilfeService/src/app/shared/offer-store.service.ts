@@ -22,6 +22,11 @@ export class OfferStoreService {
     pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
+  getOffersByGiverId(giverId: string): Observable<Offer[]> {
+    return this.http.get<Offer[]>(`${this.api}/offersByUser/${giverId}`).
+      pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
 
   private errorHandler(error: Error | any): Observable<any> {
     return throwError(error);
