@@ -37,8 +37,8 @@ export class OfferStoreService {
       pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
-  update(offer: Offer):Observable<any> {
-    return this.http.put<any>(`${this.api}/offers/${offer.id}`, offer).
+  update(offer: Offer):Observable<Offer> {
+    return this.http.put<Offer>(`${this.api}/offers/${offer.id}`, offer).
       pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 

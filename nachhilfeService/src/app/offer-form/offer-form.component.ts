@@ -40,7 +40,7 @@ export class OfferFormComponent implements OnInit {
     }
   }*/
 
-  ngOnInit() {
+  /*ngOnInit() {
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isUpdatingOffer = true;
@@ -53,10 +53,25 @@ export class OfferFormComponent implements OnInit {
       // Nur beim Erstellen sofort initialisieren
       this.initOffer();
     }
+  }*/
+
+  ngOnInit() {
+    const id = this.route.snapshot.params['id'];
+    if (id) {
+      this.isUpdatingOffer = true;
+      this.os.getSingle(id).subscribe(offer => {
+        this.offer = offer;
+        this.initOffer(); // nur hier initialisieren!
+      });
+    } else {
+      this.initOffer();
+    }
   }
 
 
-  initOffer() {
+
+  /*initOffer() {
+    console.log('Offer in initOffer:', this.offer);
     this.offerForm = this.fb.group({
       name: [this.offer.name, Validators.required],
       description: [this.offer.description],
@@ -83,7 +98,39 @@ export class OfferFormComponent implements OnInit {
     } else {
       this.addSubcourse(); // mindestens ein Subkurs
     }
+  }*/
+
+  initOffer() {
+    console.log('Offer in initOffer:', this.offer); // 🐞 prüfe, ob name da ist
+
+    this.offerForm = this.fb.group({
+      name: [this.offer.name || '', Validators.required], // <- absichern mit fallback
+      description: [this.offer.description || ''],
+      comment: [this.offer.comment || ''],
+      course: this.fb.group({
+        name: [this.offer.course?.name || '', Validators.required],
+        subcourses: this.fb.array([])
+      }),
+      slots: this.fb.array([])
+    });
+
+    if (this.offer.slots?.length) {
+      for (const slot of this.offer.slots) {
+        this.addSlot(slot);
+      }
+    } else {
+      this.addSlot();
+    }
+
+    if (this.offer.course?.subcourses?.length) {
+      for (const sub of this.offer.course.subcourses) {
+        this.addSubcourse(sub);
+      }
+    } else {
+      this.addSubcourse();
+    }
   }
+
 
   get slots(): FormArray {
     return this.offerForm.get('slots') as FormArray;
@@ -145,11 +192,11 @@ export class OfferFormComponent implements OnInit {
     });
   }*/
 
+
   submitForm() {
     const raw = this.offerForm.value;
 
-    const offerPayload: Offer = {
-      ...this.offer,
+    /*const offerPayload: Offer = {
       name: raw.name,
       description: raw.description,
       comment: raw.comment,
@@ -163,13 +210,33 @@ export class OfferFormComponent implements OnInit {
       slots: raw.slots.filter((s: any) => s.start_time && s.end_time),
       id: this.offer.id, // wichtig fürs Update
       created_at: this.offer.created_at,
+      updated_at: this.offer.updated_at,
+      ...this.offer,
+    };*/
+
+    const offerPayload: Offer = {
+      id: this.offer.id,
+      name: raw.name,
+      description: raw.description,
+      comment: raw.comment,
+      booked: this.offer.booked ?? false,
+      giver: this.offer.giver,
+      course: {
+        id: this.offer.course.id,
+        name: raw.course.name,
+        subcourses: raw.course.subcourses
+      },
+      slots: raw.slots.filter((s: any) => s.start_time && s.end_time),
+      created_at: this.offer.created_at,
       updated_at: this.offer.updated_at
     };
 
+
     if (this.isUpdatingOffer) {
+      console.log('Payload zum Senden:', offerPayload);
       this.os.update(offerPayload).subscribe({
         next: () => {
-          this.router.navigate(['/offers', this.offer.id]);
+          this.router.navigate(['/angebote', this.offer.id]);
           console.log(this.offer);
         },
         error: (err) => {
@@ -187,7 +254,7 @@ export class OfferFormComponent implements OnInit {
         next: () => {
           this.offerForm.reset(OfferFactory.empty());
           this.offer = OfferFactory.empty();
-          this.router.navigate(['/offers']);
+          this.router.navigate(['/angebote']);
         },
         error: (err) => {
           console.error('Fehler beim Erstellen:', err);
@@ -195,6 +262,7 @@ export class OfferFormComponent implements OnInit {
       });
     }
   }
+
 
 
 

@@ -4,75 +4,78 @@
   </button>
 </div>
 
-<form [formGroup]="offerForm" (ngSubmit)="submitForm()" class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow space-y-8">
+@if (offerForm) {
+  <form [formGroup]="offerForm" (ngSubmit)="submitForm()" class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow space-y-8">
 
-  <h1 class="text-3xl font-bold text-gray-800">Neues Angebot erstellen</h1>
+    <h1 class="text-3xl font-bold text-gray-800">Neues Angebot erstellen</h1>
 
-  <!-- Angebotsname -->
-  <div>
-    <label class="block font-medium text-gray-700 mb-1">Angebotstitel</label>
-    <input formControlName="name" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Mathe Nachhilfe" />
-  </div>
-
-  <!-- Beschreibung -->
-  <div>
-    <label class="block font-medium text-gray-700 mb-1">Beschreibung</label>
-    <textarea formControlName="description" rows="3" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Ich biete Nachhilfe für..."></textarea>
-  </div>
-
-  <!-- Kommentar -->
-  <div>
-    <label class="block font-medium text-gray-700 mb-1">Kommentar</label>
-    <textarea formControlName="comment" rows="2" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="Optionaler Kommentar..."></textarea>
-  </div>
-
-  <!-- Kurs -->
-  <div formGroupName="course" class="p-6 rounded-xl border border-gray-200 bg-gray-50 space-y-4">
+    <!-- Angebotsname -->
     <div>
-      <label class="block font-medium text-gray-700 mb-1">Fach / Kursname</label>
-      <input formControlName="name" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Mathematik" />
+      <label class="block font-medium text-gray-700 mb-1">Angebotstitel</label>
+      <input formControlName="name" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Mathe Nachhilfe" />
     </div>
 
-    <!-- Subkurse -->
-    <div formArrayName="subcourses">
-      <label class="block font-medium text-gray-700 mb-2">Unterthemen</label>
+    <!-- Beschreibung -->
+    <div>
+      <label class="block font-medium text-gray-700 mb-1">Beschreibung</label>
+      <textarea formControlName="description" rows="3" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Ich biete Nachhilfe für..."></textarea>
+    </div>
 
-      <div class="space-y-2">
-        @for (sub of subcourses.controls; let i = $index; track i) {
-          <div [formGroupName]="i" class="flex items-center gap-2">
-            <input formControlName="name" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Algebra" />
-            <button type="button" (click)="removeSubcourse(i)" class="text-red-600 hover:underline text-sm">✕</button>
+    <!-- Kommentar -->
+    <div>
+      <label class="block font-medium text-gray-700 mb-1">Kommentar</label>
+      <textarea formControlName="comment" rows="2" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="Optionaler Kommentar..."></textarea>
+    </div>
+
+    <!-- Kurs -->
+    <div formGroupName="course" class="p-6 rounded-xl border border-gray-200 bg-gray-50 space-y-4">
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Fach / Kursname</label>
+        <input formControlName="name" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Mathematik" />
+      </div>
+
+      <!-- Subkurse -->
+      <div formArrayName="subcourses">
+        <label class="block font-medium text-gray-700 mb-2">Unterthemen</label>
+
+        <div class="space-y-2">
+          @for (sub of subcourses.controls; let i = $index; track i) {
+            <div [formGroupName]="i" class="flex items-center gap-2">
+              <input formControlName="name" class="border border-gray-300 rounded-lg p-3 w-full" placeholder="z.B. Algebra" />
+              <button type="button" (click)="removeSubcourse(i)" class="text-red-600 hover:underline text-sm">✕</button>
+            </div>
+          }
+        </div>
+
+        <button type="button" (click)="addSubcourse()" class="text-cyan-600 mt-2 hover:underline text-sm">+ Unterthema hinzufügen</button>
+      </div>
+    </div>
+
+    <!-- Slots -->
+    <div formArrayName="slots">
+      <label class="block font-medium text-gray-700 mb-2">Termine</label>
+
+      <div class="space-y-3">
+        @for (slot of slots.controls; let i = $index; track i) {
+          <div [formGroupName]="i" class="flex items-center gap-3">
+            <input type="datetime-local" formControlName="start_time" class="border border-gray-300 rounded-lg p-2" />
+            <span class="text-gray-600">bis</span>
+            <input type="datetime-local" formControlName="end_time" class="border border-gray-300 rounded-lg p-2" />
+            <button type="button" (click)="removeSlot(i)" class="text-red-600 hover:underline text-sm">✕</button>
           </div>
         }
       </div>
 
-      <button type="button" (click)="addSubcourse()" class="text-cyan-600 mt-2 hover:underline text-sm">+ Unterthema hinzufügen</button>
-    </div>
-  </div>
-
-  <!-- Slots -->
-  <div formArrayName="slots">
-    <label class="block font-medium text-gray-700 mb-2">Termine</label>
-
-    <div class="space-y-3">
-      @for (slot of slots.controls; let i = $index; track i) {
-        <div [formGroupName]="i" class="flex items-center gap-3">
-          <input type="datetime-local" formControlName="start_time" class="border border-gray-300 rounded-lg p-2" />
-          <span class="text-gray-600">bis</span>
-          <input type="datetime-local" formControlName="end_time" class="border border-gray-300 rounded-lg p-2" />
-          <button type="button" (click)="removeSlot(i)" class="text-red-600 hover:underline text-sm">✕</button>
-        </div>
-      }
+      <button type="button" (click)="addSlot()" class="text-cyan-600 mt-3 hover:underline text-sm">+ Neuer Termin</button>
     </div>
 
-    <button type="button" (click)="addSlot()" class="text-cyan-600 mt-3 hover:underline text-sm">+ Neuer Termin</button>
-  </div>
+    <!-- Absenden -->
+    <div class="pt-6">
+      <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-medium px-6 py-3 rounded-lg shadow">
+        Angebot speichern
+      </button>
+    </div>
 
-  <!-- Absenden -->
-  <div class="pt-6">
-    <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-medium px-6 py-3 rounded-lg shadow">
-      Angebot speichern
-    </button>
-  </div>
+  </form>
+}
 
-</form>
