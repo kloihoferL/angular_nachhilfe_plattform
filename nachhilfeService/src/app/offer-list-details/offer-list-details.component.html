@@ -100,16 +100,70 @@
 
     <!-- Buchungsbutton -->
     <div class="pt-4">
-      <button class="px-5 py-2 bg-gradient-to-r from-cyan-600 to-teal-500 text-white rounded hover:opacity-90 transition font-semibold">
+      <button (click)="openModal()"class="px-5 py-2 bg-gradient-to-r from-cyan-600 to-teal-500 text-white rounded hover:opacity-90 transition font-semibold">
         <i class="fa fa-calendar-check mr-2"></i> Nachhilfe buchen
       </button>
     </div>
+  </div>
 
-    <div class="pt-4" (click)="removeOffer(o.id)">
-      <button class="px-5 py-2 bg-gradient-to-r from-cyan-600 to-teal-500 text-white rounded hover:opacity-90 transition font-semibold">
-        <i class="fa fa-calendar-check mr-2"></i> Nachhilfe löschen
-      </button>
+
+
+  <!-- Modal -->
+  @if (showModal()) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Nachhilfe buchen</h2>
+        <label class="block text-gray-700 font-medium mb-2">Verfügbare Termine:</label>
+        <div class="space-y-2 mb-4">
+          @for (slot of o.slots; track slot.id) {
+            <div class="flex items-center">
+              <input
+                type="radio"
+                [id]="'slot-' + slot.id"
+                [value]="slot.id"
+                [checked]="selectedSlot()?.id === slot.id"
+                (change)="selectedSlot.set(slot)"
+                name="selectedSlot"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+              >
+              <label
+                [for]="'slot-' + slot.id"
+                class="ms-2 text-sm font-medium text-black"
+              >
+                {{ slot.start_time | date:'short' }} – {{ slot.end_time | date:'short' }}
+              </label>
+            </div>
+          }
+        </div>
+
+        <h2>Kurs: {{o.course.name}}</h2>
+        <label class="block text-gray-700 font-medium mb-2">Wähle Unterthemen:</label>
+        <div class="flex flex-col gap-4 mb-4">
+          @for (sub of o.course.subcourses; track sub.id) {
+            <label class="inline-flex items-center space-x-2">
+              <input
+                type="checkbox"
+                [value]="sub.id"
+                [checked]="isSubcourseSelected(sub.id)"
+                (change)="toggleSubcourse(sub, $event)"
+                class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500 focus:ring-2"
+              >
+              <span class="text-sm text-gray-800">{{ sub.name }}</span>
+            </label>
+          }
+        </div>
+
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button (click)="closeModal()" class="text-gray-500 hover:underline">Abbrechen</button>
+          <!--<button (click)="getbookingData()">Buchen</button>-->
+        </div>
+      </div>
     </div>
 
-  </div>
+  }
+
+
+
+
 }

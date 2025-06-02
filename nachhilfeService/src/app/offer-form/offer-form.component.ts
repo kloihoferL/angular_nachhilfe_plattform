@@ -101,7 +101,7 @@ export class OfferFormComponent implements OnInit {
   }*/
 
   initOffer() {
-    console.log('Offer in initOffer:', this.offer); // 🐞 prüfe, ob name da ist
+    console.log('Offer in initOffer:', this.offer); //
 
     this.offerForm = this.fb.group({
       name: [this.offer.name || '', Validators.required], // <- absichern mit fallback

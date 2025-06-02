@@ -17,6 +17,11 @@ export class BookingStoreService {
     pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
+  create(booking: Booking): Observable<Booking> {
+    return this.http.post<Booking>(`${this.api}/booking`, booking).
+      pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
 
   private errorHandler(error: Error | any): Observable<any> {
     return throwError(error);

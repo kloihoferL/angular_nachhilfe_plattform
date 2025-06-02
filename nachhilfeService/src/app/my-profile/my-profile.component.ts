@@ -4,7 +4,7 @@ import {BookingStoreService} from '../shared/booking-store.service';
 import {Offer} from '../shared/offer';
 import {Booking} from '../shared/booking';
 import {OfferListItemComponent} from '../offer-list-item/offer-list-item.component';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {OfferListComponent} from '../offer-list/offer-list.component';
 import {AuthentificationService} from '../shared/authentification.service';
 import {ToastrService} from 'ngx-toastr';
@@ -17,7 +17,8 @@ import {Router, RouterLink} from '@angular/router';
     OfferListItemComponent,
     DatePipe,
     OfferListComponent,
-    RouterLink
+    RouterLink,
+    NgClass
   ],
   templateUrl: './my-profile.component.html',
   styles: ``
@@ -27,6 +28,8 @@ export class MyProfileComponent implements OnInit{
   bookings = signal<Booking[]>([]);
   offers = signal<Offer[]>([]);
   //offer = signal<Offer|undefined>(undefined);
+  activeTab: 'bookings' | 'offers' = 'offers'; // default tab
+
 
   constructor(private bs:BookingStoreService, private os:OfferStoreService, private auth:AuthentificationService,
               private toastr:ToastrService, private router: Router) {
