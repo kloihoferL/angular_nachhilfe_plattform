@@ -31,7 +31,8 @@ export class MyProfileComponent implements OnInit{
   activeTab: 'bookings' | 'offers' = 'offers'; // default tab
 
 
-  constructor(private bs:BookingStoreService, private os:OfferStoreService, private auth:AuthentificationService,
+
+  constructor(private bs:BookingStoreService, private os:OfferStoreService, public auth:AuthentificationService,
               private toastr:ToastrService, private router: Router) {
 
   }
@@ -55,5 +56,7 @@ ngOnInit() {
       );
     }
   }
+
+
 
 }

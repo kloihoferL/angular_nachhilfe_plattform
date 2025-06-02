@@ -20,8 +20,6 @@ export class AuthentificationService {
 
   constructor(private http:HttpClient) { } //httpClient injizieren
 
-
-
   login(email:string, password:string){
     return this.http.post(`${this.api}/login`, {email, password})
   }
@@ -62,7 +60,6 @@ export class AuthentificationService {
   public getCurrentUserRole():string{
     return <string>sessionStorage.getItem("userRole") || "user";
   }
-
 
   setSessionStorage(access_token: string) {
     console.log(jwtDecode(access_token));

@@ -26,7 +26,7 @@ export class OfferFactory {
       rawOffer.booked,
       rawOffer.slots
         ? rawOffer.slots.map((s: any) =>
-          new Slot(s.id, s.start_time, s.end_time, s.offer_id)
+          new Slot(s.id, s.start_time, s.end_time, s.offer_id, s.is_booked)
         )
         : [],
       typeof rawOffer.created_at === 'string'

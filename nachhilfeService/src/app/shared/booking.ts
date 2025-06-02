@@ -6,16 +6,14 @@ import {Course, Offer} from './offer';
 export class Booking {
 
   constructor(
-    public id: string,
-    public created_at: Date,
-    public updated_at: Date,
-    public giver: User,
-    public course:Course,
-    public receiver: User,
-    public offer: Offer,
-    public slot: Slot,
+    public course_id:string,
+    public giver_id: string,
+    public receiver_id: string,
+    public offer_id: string,
+    public slot_id: string,
 
   ) {}
+
 
 
 

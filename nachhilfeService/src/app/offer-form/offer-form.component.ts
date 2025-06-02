@@ -244,7 +244,7 @@ export class OfferFormComponent implements OnInit {
         }
       });
     } else {
-      // Erstellen benötigt user_id separat – Backend muss das Feld erwarten!
+
       const createPayload = {
         ...offerPayload,
         user_id: this.authService.getCurrentUserId()

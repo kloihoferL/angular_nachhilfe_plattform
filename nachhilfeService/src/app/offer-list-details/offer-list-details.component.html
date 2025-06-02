@@ -53,29 +53,7 @@
         <p class="text-gray-600">{{ o.comment }}</p>
       </div>
     }
-    <!--Status ist unnötig wenn im offer angezeigt, denn wenn er nicht mehr verfügbar ist wird er auch nicht angezeigt-->
-    <!--<div class="flex items-start gap-5">
-      <div class="pt-1">
 
-        @if (!o.booked) {
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-600">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-          </svg>
-
-        } @else {
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-600">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-          </svg>
-
-        }
-      </div>
-      <div>
-        <p class="text-gray-800 font-medium">Status:</p>
-        <span class="font-semibold" [class.text-green-600]="!o.booked" [class.text-red-500]="o.booked">
-          {{ o.booked ? 'Vergeben' : 'Verfügbar' }}
-        </span>
-      </div>
-    </div>-->
 
     <!-- Termine -->
     @if (o.slots?.length) {
@@ -90,7 +68,10 @@
           <p class="text-gray-800 font-medium">Verfügbare Termine:</p>
           <ul class="list-disc list-inside text-gray-600 text-sm">
             @for (slot of o.slots; track slot.id) {
-              <li>{{ slot.start_time | date:'short' }} – {{ slot.end_time | date:'short' }}</li>
+              @if (!slot.is_booked) {
+                <li>{{ slot.start_time | date:'short' }} – {{ slot.end_time | date:'short' }}</li>
+              }
+
             }
           </ul><br>
           <p class="text-gray-600 text-sm">Sollte kein passender Termin vorhanden sein, gibt es die Möglichkeit eine Anfrage an den Anbieter für einen anderen Termin zu senden!</p>
@@ -116,47 +97,32 @@
         <label class="block text-gray-700 font-medium mb-2">Verfügbare Termine:</label>
         <div class="space-y-2 mb-4">
           @for (slot of o.slots; track slot.id) {
-            <div class="flex items-center">
-              <input
-                type="radio"
-                [id]="'slot-' + slot.id"
-                [value]="slot.id"
-                [checked]="selectedSlot()?.id === slot.id"
-                (change)="selectedSlot.set(slot)"
-                name="selectedSlot"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
-              >
-              <label
-                [for]="'slot-' + slot.id"
-                class="ms-2 text-sm font-medium text-black"
-              >
-                {{ slot.start_time | date:'short' }} – {{ slot.end_time | date:'short' }}
-              </label>
-            </div>
+            @if (!slot.is_booked) {
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  [id]="'slot-' + slot.id"
+                  [value]="slot.id"
+                  [checked]="selectedSlot()?.id === slot.id"
+                  (change)="selectedSlot.set(slot)"
+                  name="selectedSlot"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                >
+                <label
+                  [for]="'slot-' + slot.id"
+                  class="ms-2 text-sm font-medium text-black"
+                >
+                  {{ slot.start_time | date:'short' }} – {{ slot.end_time | date:'short' }}
+                </label>
+              </div>
+            }
+
           }
         </div>
-
-        <h2>Kurs: {{o.course.name}}</h2>
-        <label class="block text-gray-700 font-medium mb-2">Wähle Unterthemen:</label>
-        <div class="flex flex-col gap-4 mb-4">
-          @for (sub of o.course.subcourses; track sub.id) {
-            <label class="inline-flex items-center space-x-2">
-              <input
-                type="checkbox"
-                [value]="sub.id"
-                [checked]="isSubcourseSelected(sub.id)"
-                (change)="toggleSubcourse(sub, $event)"
-                class="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500 focus:ring-2"
-              >
-              <span class="text-sm text-gray-800">{{ sub.name }}</span>
-            </label>
-          }
-        </div>
-
 
         <div class="flex justify-end gap-3 mt-6">
           <button (click)="closeModal()" class="text-gray-500 hover:underline">Abbrechen</button>
-          <!--<button (click)="getbookingData()">Buchen</button>-->
+          <button (click)="getbookingData()">Buchen</button>
         </div>
       </div>
     </div>

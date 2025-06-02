@@ -29,7 +29,6 @@ export class OfferListDetailsComponent implements OnInit {
 
   showModal = signal<boolean>(false);
   selectedSlot = signal<Slot | null>(null);
-  selectedSubCourses = signal<Subcourse[]>([]);
 
   constructor(private os:OfferStoreService, private route:ActivatedRoute,
               private toastr:ToastrService, private router:Router,
@@ -51,7 +50,6 @@ export class OfferListDetailsComponent implements OnInit {
   closeModal() {
     this.showModal.set(false);
     this.selectedSlot.set(null);
-    this.selectedSubCourses.set([]);
   }
 
   /*toggleSubcourse(id: string, checked: boolean) {
@@ -65,25 +63,6 @@ export class OfferListDetailsComponent implements OnInit {
     }
   }*/
 
-  toggleSubcourse(sub: Subcourse, event: Event) {
-    const input = event.target as HTMLInputElement;
-    const checked = input?.checked ?? false;
-
-    const current = this.selectedSubCourses();
-    if (checked) {
-      if (!current.some(s => s.id === sub.id)) {
-        this.selectedSubCourses.set([...current, sub]);
-      }
-    } else {
-      this.selectedSubCourses.set(current.filter(s => s.id !== sub.id));
-    }
-  }
-
-
-  isSubcourseSelected(id: string): boolean {
-    return this.selectedSubCourses().some(s => s.id === id);
-  }
-
 
 
   /*getbookingData() {
@@ -93,25 +72,52 @@ export class OfferListDetailsComponent implements OnInit {
       return;
     }
 
-    const payload = {
-      id: offer.id,
-      created_at: new Date(),
-      updated_at: new Date(),
-      giver: offer.giver.id,
-      course: offer.course,
-      receiver: this.authService.getCurrentUserId(),
-      offer: offer,
-      slot: this.selectedSlot(),
-      subcourses: this.selectedSubCourses(),
-    };
+    const payload = [{
+      giver_id: offer.giver.id,
+      receiver_id: this.authService.getCurrentUserId(),
+      offer_id: offer.id,
+      slot_id: this.selectedSlot()!.id,
+      course_id: offer.course.id
+    }];
 
     console.log('Buchungspayload:', payload);
-
-    // Jetzt an dein Backend senden
-
     this.bs.create(payload);
 
   }*/
+
+
+  getbookingData() {
+    const offer = this.offer();
+    if (!offer || !this.selectedSlot()) {
+      this.toastr.warning('Bitte wählen Sie einen Termin.');
+      return;
+    }
+
+    const payload = [{
+      giver_id: offer.giver.id,
+      receiver_id: this.authService.getCurrentUserId(),
+      offer_id: offer.id,
+      slot_id: this.selectedSlot()!.id,
+      course_id: offer.course.id,
+      is_booked: true,
+    }];
+
+    console.log('Buchungspayload:', payload);
+
+
+    this.bs.create(payload).subscribe({
+      next: () => {
+        this.toastr.success('Buchung erfolgreich!');
+        //hier ist booked dann auf true setzen
+        this.closeModal();
+      },
+      error: (err) => {
+        this.toastr.error('Fehler beim Buchen');
+        console.error(err);
+      }
+    });
+  }
+
 
 
 

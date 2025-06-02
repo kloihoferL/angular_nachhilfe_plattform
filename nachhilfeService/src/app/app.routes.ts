@@ -8,6 +8,7 @@ import {OfferFormComponent} from './offer-form/offer-form.component';
 import {LoginComponent} from './login/login.component';
 import {canNavigateToAdminGuard} from '../../navigate-guard';
 import {MyProfileComponent} from './my-profile/my-profile.component';
+import {NotificationsComponent} from './notifications/notifications.component';
 
 export const routes: Routes = [
   {path:'', redirectTo:'home', pathMatch:'full'},
@@ -20,7 +21,9 @@ export const routes: Routes = [
   {
     path: 'angebote/:id/edit',
     component: OfferFormComponent
-  }
+  },
+
+  {path:'benachrichtigungen', component:NotificationsComponent}
 
 
 
