@@ -1,32 +1,48 @@
-<p>Alle deine Nachrichten</p>
+<p class="text-xl font-semibold mb-4">Alle deine Nachrichten</p>
 
-@for ( notification of notifications(); track notification.id) {
-  @if (auth.getCurrentUserId() == notification.receiver.id && auth.getCurrentUserRole() == 'geber' && notification.status == 'pending') {
-    <div class="notification-item p-4 mb-2 bg-white rounded shadow hover:shadow-md transition">
-      <h3 class="text-lg font-semibold"> Neue Anfrage von: {{ notification.sender.name }}</h3>
-      <p>Für das Angebot {{notification.offer.name}}</p>
-      <p class="text-gray-600">  Gewünschter Termin: {{ notification.requested_time | date:'fullDate' }}
-        um {{ notification.requested_time | date:'shortTime' }}
-      </p>
-      @if (notification.message) {
-        <p>Nachricht: {{notification.message}}</p>
-      }
-      <button (click)="rejectAppointment(notification.id)" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded cursor-pointer">
-        Anfrage ablehnen
-      </button>
-      <button (click)="acceptAppointment(notification.id)" class="bg-green-600 hover:bg-green-700 text-white p-2 rounded cursor-pointer">
-        Anfrage annehmen
-      </button>
-    </div>
+<div class="space-y-4">
+  @for (notification of notifications(); track notification.id) {
+    @if (
+      auth.getCurrentUserId() == notification.receiver.id &&
+      auth.getCurrentUserRole() == 'geber' &&
+      notification.status == 'pending'
+      ) {
+      <div class="bg-white rounded-2xl shadow-md p-6 transition hover:shadow-lg border border-gray-200">
+        <h3 class="text-lg font-bold text-gray-800 mb-2">
+          Neue Anfrage von: <span class="text-blue-600">{{ notification.sender.name }}</span>
+        </h3>
+        <p class="text-gray-700 mb-1">
+          Für das Angebot <span class="font-medium">{{ notification.offer.name }}</span>
+        </p>
+        <p class="text-gray-600 mb-1">
+          Gewünschter Termin:
+          <span class="font-medium text-gray-800">{{ notification.requested_time | date: 'fullDate' }}</span>
+          um
+          <span class="font-medium text-gray-800">{{ notification.requested_time | date: 'shortTime' }}</span>
+        </p>
+        @if (notification.message) {
+          <p class="text-gray-700 italic mb-2">Nachricht: {{ notification.message }}</p>
+        }
+
+        <div class="flex space-x-3 mt-4">
+          <button
+            (click)="rejectAppointment(notification.id)"
+            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition"
+          >
+            Anfrage ablehnen
+          </button>
+          <button
+            (click)="acceptAppointment(notification.id)"
+            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition"
+          >
+            Anfrage annehmen
+          </button>
+        </div>
+      </div>
+    }
   }
-}
-
+</div>
 
 @if (notifications().length === 0) {
-  <p>Keine Nachrichten vorhanden</p>
+  <p class="text-gray-500 text-sm italic">Keine Nachrichten vorhanden</p>
 }
-
-
-
-
-

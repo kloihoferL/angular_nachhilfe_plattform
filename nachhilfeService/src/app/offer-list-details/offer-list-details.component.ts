@@ -78,13 +78,13 @@ export class OfferListDetailsComponent implements OnInit {
       return;
     }
 
-    const payload:any = [{
+    const payload:any = {
       giver_id: offer.giver.id,
       receiver_id: this.authService.getCurrentUserId(),
       offer_id: offer.id,
-      slot_id: this.selectedSlot()!.id,
+      slot_id: this.selectedSlot()?.id,
       course_id: offer.course.id,
-    }];
+    };
 
     console.log('Buchungspayload:', payload);
 
