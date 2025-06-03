@@ -2,13 +2,13 @@ import {Component, input, OnInit, signal} from '@angular/core';
 import {OfferStoreService} from '../shared/offer-store.service';
 import {BookingStoreService} from '../shared/booking-store.service';
 import {Offer} from '../shared/offer';
-import {Booking} from '../shared/booking';
 import {OfferListItemComponent} from '../offer-list-item/offer-list-item.component';
 import {DatePipe, NgClass} from '@angular/common';
 import {OfferListComponent} from '../offer-list/offer-list.component';
 import {AuthentificationService} from '../shared/authentification.service';
 import {ToastrService} from 'ngx-toastr';
 import {Router, RouterLink} from '@angular/router';
+import {Booking} from '../shared/booking';
 
 
 @Component({

@@ -1,33 +1,32 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Offer} from './offer';
+import {Booking} from './bookingpayload';
 import {catchError, Observable, retry, throwError} from 'rxjs';
-import {Booking} from './booking';
-import {BookingPayload} from './booking-payload';
+import {Appointment} from './appointment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BookingStoreService {
+export class AppointmentStoreService {
   private api = "http://nachhilfeservice.s2210456016.student.kwmhgb.at/api"
+
 
   constructor(private http: HttpClient) { }
 
-  getallBookings(){
-    return this.http.get<Array<any>>(`${this.api}/bookings`).
+  getallAppointments(){
+    return this.http.get<Array<Appointment>>(`${this.api}/appointmentRequests`).
     pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
-  create(bookings: any): Observable<any> {
-    return this.http.post(`${this.api}/booking`, bookings,).
+  //TODO: IM BE implementieren
+  getAppointmentByUserId(userId: string): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.api}/appointmentRequestsByUser/${userId}`).
       pipe(retry(3)).pipe(catchError(this.errorHandler));
-
   }
-
-
 
   private errorHandler(error: Error | any): Observable<any> {
     return throwError(error);
   }
+
 
 }

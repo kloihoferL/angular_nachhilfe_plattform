@@ -9,12 +9,16 @@ import {AuthentificationService} from '../shared/authentification.service';
 import {Subcourse} from '../shared/subcourse';
 import {HttpClient} from '@angular/common/http';
 import {BookingStoreService} from '../shared/booking-store.service';
+import {BookingPayload} from '../shared/booking-payload';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-offer-list-details',
   imports: [
     RouterLink,
-    DatePipe
+    DatePipe,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './offer-list-details.component.html',
   styles: ``
@@ -93,13 +97,12 @@ export class OfferListDetailsComponent implements OnInit {
       return;
     }
 
-    const payload = [{
+    const payload:any = [{
       giver_id: offer.giver.id,
       receiver_id: this.authService.getCurrentUserId(),
       offer_id: offer.id,
       slot_id: this.selectedSlot()!.id,
       course_id: offer.course.id,
-      is_booked: true,
     }];
 
     console.log('Buchungspayload:', payload);
