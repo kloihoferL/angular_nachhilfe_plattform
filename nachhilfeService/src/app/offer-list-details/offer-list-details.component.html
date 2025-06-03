@@ -74,7 +74,7 @@
 
             }
           </ul><br>
-          <p class="text-gray-600 text-sm">Sollte kein passender Termin vorhanden sein, gibt es die Möglichkeit eine Anfrage an den Anbieter für einen anderen Termin zu senden!</p>
+          <p class="text-gray-600 text-sm">Sollte kein passender Termin vorhanden sein, gibt es die Möglichkeit eine Anfrage an den/die Anbieter:in für einen anderen Termin zu senden!</p>
         </div>
       </div>
     }
@@ -119,15 +119,16 @@
 
           }
         </div>
-
         <div>
-          <p class="text-lg font-bold">Kein passender Termin dabei?</p>
-          <p> Wähle hier dein Wunschdatum und Uhrzeit, und schicke eine Anfrage an den Geber</p>
-          <input type="datetime-local" class="border border-gray-300 rounded-lg p-2"
+          <p class="text-lg font-bold mb-1">Kein passender Termin dabei?</p>
+          <p class="text-sm mb-4"> Wähle hier dein Wunschdatum und Uhrzeit, und schicke eine Anfrage an den/die Geber:in</p>
+          <label class="block text-gray-700 text-sm mb-2">Gewünschtes Datum und Uhrzeit:</label>
+          <input type="datetime-local" class="border border-gray-300 rounded-lg p-2 mb-1"
                  (input)="onAppointmentChange($event)"/>
-          <input type="text" class="border border-gray-300 rounded-lg p-2 mt-2 w-full" placeholder="Optionale Nachricht"
+          <label class="block text-gray-700 text-sm mt-2">Optionale Nachricht</label>
+          <input type="text" class="border border-gray-300 rounded-lg p-2 mt-2 mb-3 w-full" placeholder="Optionale Nachricht"
                  (input)="onMessageChange($event)"/>
-          <button (click)="getAppointmentData()" class="text-gray-500 hover:underline">Anfrage schicken</button>
+          <button (click)="getAppointmentData()" class="bg-gray-200 p-3 hover:bg-gray-300 rounded ">Anfrage schicken</button>
 
         </div>
 
