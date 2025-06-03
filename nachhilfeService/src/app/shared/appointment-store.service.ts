@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Booking} from './bookingpayload';
 import {catchError, Observable, retry, throwError} from 'rxjs';
 import {Appointment} from './appointment';
 
@@ -18,9 +17,24 @@ export class AppointmentStoreService {
     pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
+  create(appointment: Appointment): Observable<any> {
+    return this.http.post(`${this.api}/newAppointment`, appointment).
+      pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
   //TODO: IM BE implementieren
   getAppointmentByUserId(userId: string): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.api}/appointmentRequestsByUser/${userId}`).
+      pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
+  acceptAppointment(id: string): Observable<Appointment> {
+    return this.http.put<Appointment>(`${this.api}/acceptAppointment/${id}`, {}).
+      pipe(retry(3)).pipe(catchError(this.errorHandler));
+  }
+
+  rejectAppointment(id: string): Observable<Appointment> {
+    return this.http.put<Appointment>(`${this.api}/rejectAppointment/${id}`, {}).
       pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 

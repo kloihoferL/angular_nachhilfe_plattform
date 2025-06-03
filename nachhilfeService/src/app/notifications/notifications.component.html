@@ -1,10 +1,31 @@
-<
+<p>Alle deine Nachrichten</p>
+
+@for ( notification of notifications(); track notification.id) {
+  @if (auth.getCurrentUserId() == notification.receiver.id && auth.getCurrentUserRole() == 'geber' && notification.status == 'pending') {
+    <div class="notification-item p-4 mb-2 bg-white rounded shadow hover:shadow-md transition">
+      <h3 class="text-lg font-semibold"> Neue Anfrage von: {{ notification.sender.name }}</h3>
+      <p>Für das Angebot {{notification.offer.name}}</p>
+      <p class="text-gray-600">  Gewünschter Termin: {{ notification.requested_time | date:'fullDate' }}
+        um {{ notification.requested_time | date:'shortTime' }}
+      </p>
+      @if (notification.message) {
+        <p>Nachricht: {{notification.message}}</p>
+      }
+      <button (click)="rejectAppointment(notification.id)" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded cursor-pointer">
+        Anfrage ablehnen
+      </button>
+      <button (click)="acceptAppointment(notification.id)" class="bg-green-600 hover:bg-green-700 text-white p-2 rounded cursor-pointer">
+        Anfrage annehmen
+      </button>
+    </div>
+  }
+}
 
 
+@if (notifications().length === 0) {
+  <p>Keine Nachrichten vorhanden</p>
+}
 
-
-<!-- wenn keine vorhanden sind -->
-<p>Keine Nachrichten vorhanden</p>
 
 
 

@@ -4,6 +4,6 @@ export class BookingPayload{
     public receiver_id: string,
     public offer_id: string,
     public slot_id: string,
-    public course_id: string,
+
   ) {}
 }

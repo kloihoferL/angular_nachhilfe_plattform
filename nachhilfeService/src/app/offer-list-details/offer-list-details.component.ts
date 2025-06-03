@@ -11,6 +11,7 @@ import {HttpClient} from '@angular/common/http';
 import {BookingStoreService} from '../shared/booking-store.service';
 import {BookingPayload} from '../shared/booking-payload';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AppointmentStoreService} from '../shared/appointment-store.service';
 
 @Component({
   selector: 'app-offer-list-details',
@@ -33,10 +34,13 @@ export class OfferListDetailsComponent implements OnInit {
 
   showModal = signal<boolean>(false);
   selectedSlot = signal<Slot | null>(null);
+  selectedAppointment = signal<Date | null>(null);
+  messageText = signal<string>('');
 
   constructor(private os:OfferStoreService, private route:ActivatedRoute,
               private toastr:ToastrService, private router:Router,
-              private authService: AuthentificationService, private bs:BookingStoreService) {
+              private authService: AuthentificationService, private bs:BookingStoreService,
+              private as:AppointmentStoreService) {
 
   }
 
@@ -56,38 +60,15 @@ export class OfferListDetailsComponent implements OnInit {
     this.selectedSlot.set(null);
   }
 
-  /*toggleSubcourse(id: string, checked: boolean) {
-    const current = this.selectedSubCourses();
-    if (checked) {
-      if (!current.includes(id)) {
-        this.selectedSubCourses.set([...current, id]);
-      }
-    } else {
-      this.selectedSubCourses.set(current.filter(subId => subId !== id));
-    }
-  }*/
+  onAppointmentChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.selectedAppointment.set(value ? new Date(value) : null);
+  }
 
-
-
-  /*getbookingData() {
-    const offer = this.offer();
-    if (!offer || !this.selectedSlot()) {
-      this.toastr.warning('Bitte wählen Sie einen Termin.');
-      return;
-    }
-
-    const payload = [{
-      giver_id: offer.giver.id,
-      receiver_id: this.authService.getCurrentUserId(),
-      offer_id: offer.id,
-      slot_id: this.selectedSlot()!.id,
-      course_id: offer.course.id
-    }];
-
-    console.log('Buchungspayload:', payload);
-    this.bs.create(payload);
-
-  }*/
+  onMessageChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.messageText.set(value);
+  }
 
 
   getbookingData() {
@@ -119,6 +100,42 @@ export class OfferListDetailsComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  getAppointmentData(){
+    const offer = this.offer();
+    if(!this.selectedAppointment()){
+      this.toastr.warning("Bitte wählen sie eine Wunsch-Termin aus.")
+    }
+
+    if (!offer){
+      this.toastr.error('Angebot nicht gefunden.');
+      return;
+    }
+
+    const AppointmentPayload: any = {
+      offer_id: offer.id,
+      sender_id: 1,
+      receiver_id: offer.giver.id,
+      requested_time: this.selectedAppointment(),
+      message: this.messageText()
+  }
+    console.log('Termin-Payload:', AppointmentPayload);
+
+    this.as.create(AppointmentPayload).subscribe({
+      next: () => {
+        this.toastr.success('Terminvorschlag wurde an Geber geschickt! Dieser wird sich zeitnah melden.');
+        //hier ist booked dann auf true setzen
+        this.closeModal();
+      },
+      error: (err) => {
+        this.toastr.error('Terminvorschlag konnte nicht gesendet werden.');
+        console.error(err);
+      }
+    });
+
+
+
   }
 
 

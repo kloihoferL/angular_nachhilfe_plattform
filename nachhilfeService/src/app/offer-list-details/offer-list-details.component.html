@@ -123,11 +123,11 @@
         <div>
           <p class="text-lg font-bold">Kein passender Termin dabei?</p>
           <p> Wähle hier dein Wunschdatum und Uhrzeit, und schicke eine Anfrage an den Geber</p>
-          <input type="datetime-local" class="border border-gray-300 rounded-lg p-2" />
-          <span class="text-gray-600"> bis </span>
-          <input type="datetime-local" class="border border-gray-300 rounded-lg p-2" />
-          <input type="text" class="border border-gray-300 rounded-lg p-2 mt-2 w-full" placeholder="Optionale Nachricht" />
-          <button class="text-gray-500 hover:underline">Anfrage schicken</button>
+          <input type="datetime-local" class="border border-gray-300 rounded-lg p-2"
+                 (input)="onAppointmentChange($event)"/>
+          <input type="text" class="border border-gray-300 rounded-lg p-2 mt-2 w-full" placeholder="Optionale Nachricht"
+                 (input)="onMessageChange($event)"/>
+          <button (click)="getAppointmentData()" class="text-gray-500 hover:underline">Anfrage schicken</button>
 
         </div>
 
