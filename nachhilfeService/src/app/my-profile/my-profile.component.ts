@@ -1,4 +1,4 @@
-import {Component, input, OnInit, signal} from '@angular/core';
+import {Component, computed, input, OnInit, signal} from '@angular/core';
 import {OfferStoreService} from '../shared/offer-store.service';
 import {BookingStoreService} from '../shared/booking-store.service';
 import {Offer} from '../shared/offer';
@@ -54,6 +54,52 @@ ngOnInit() {
       );
     }
   }
+
+  filteredBookings = computed(() => {
+    const allBookings = this.bookings();
+    const currentUserId = this.auth.getCurrentUserId();
+    const role = this.auth.getCurrentUserRole();
+
+    console.log('Aktueller User:', currentUserId);
+    console.log('Rolle:', role);
+
+    allBookings.forEach(b => {
+      console.log('Booking ID:', b.id, 'Giver ID:', b.giver?.id, 'Receiver ID:', b.receiver?.id);
+    });
+
+    if (role === 'geber') {
+      return allBookings.filter(b => b.giver?.id == currentUserId);
+    } else if (role === 'nehmer') {
+      return allBookings.filter(b => b.receiver?.id == currentUserId);
+    } else {
+      return [];
+    }
+  });
+
+  filteredOffers = computed(() => {
+    const allOffers = this.offers();
+    const currentUserId = this.auth.getCurrentUserId();
+    const role = this.auth.getCurrentUserRole();
+
+    console.log('Alle Offers:', allOffers);
+    console.log('Aktueller User:', currentUserId);
+    console.log('Rolle:', role);
+
+    allOffers.forEach(o => {
+      console.log('Offer ID:', o.id, 'Giver ID:', o.giver?.id);
+    });
+
+    if (role === 'geber') {
+      return allOffers.filter(o => o.giver?.id == currentUserId);
+    } else {
+      return [];
+    }
+  });
+
+
+
+
+
 
 
 

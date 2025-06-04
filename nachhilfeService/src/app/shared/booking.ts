@@ -8,10 +8,10 @@ export interface Booking {
     id: number;
     created_at: string;
     updated_at: string;
-    giver_id: number;
-    receiver_id: number;
-    offer_id: number;
-    slot_id: number;
+    giver_id: string;
+    receiver_id: string;
+    offer_id: string;
+    slot_id: string;
 
     slot: Slot;
     offer: OfferWithCourse;
