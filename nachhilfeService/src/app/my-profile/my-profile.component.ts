@@ -55,6 +55,27 @@ ngOnInit() {
     }
   }
 
+
+
+  updateOffer(id: string) {
+    const offer = this.offers().find(o => o.id === id);
+    const currentUserId = this.auth.getCurrentUserId();
+
+    if (!offer) {
+      this.toastr.error('Angebot nicht gefunden');
+      return;
+    }
+    const hasBooking = this.bookings().some(b => b.offer_id === offer.id);
+
+    if (hasBooking) {
+      this.toastr.error('Angebot kann nicht bearbeitet werden, da es schon gebucht wurde');
+      return;
+    }
+    this.router.navigate(['/angebote', offer.id, 'edit']);
+  }
+
+
+
   filteredBookings = computed(() => {
     const allBookings = this.bookings();
     const currentUserId = this.auth.getCurrentUserId();
