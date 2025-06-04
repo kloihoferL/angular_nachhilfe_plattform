@@ -1,4 +1,3 @@
-<p class="text-xl font-semibold mb-4">Alle deine Nachrichten</p>
 
 <div class="space-y-4">
   @for (notification of notifications(); track notification.id) {
@@ -43,6 +42,33 @@
   }
 </div>
 
-@if (notifications().length === 0) {
-  <p class="text-gray-500 text-sm italic">Keine Nachrichten vorhanden</p>
+@if (auth.getCurrentUserRole() == 'nehmer') {
+  <h3 class="text-xl font-semibold mb-4 text-gray-800 text-center my-3">Nachrichten</h3>
+  <ul class="space-y-4">
+    @for (mes of messageNotifications(); track mes.id) {
+      <li class="relative bg-white shadow-md rounded-2xl p-4 border border-gray-200 hover:shadow-lg transition">
+        <button
+          (click)="onDeleteMessage(mes.id)"
+          class="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-lg font-bold px-3"
+          aria-label="Nachricht löschen"
+        >
+          ×
+        </button>
+        <p class="text-gray-700 text-sm pr-6">
+          {{ mes.content }}
+        </p>
+
+      </li>
+    }
+  </ul>
+
+
+}
+
+@if (notifications().length === 0 && auth.getCurrentUserRole() == 'geber') {
+  <p class="text-gray-500 text-sm italic m-4">Keine Nachrichten vorhanden</p>
+}
+
+@if (messageNotifications().length === 0 && auth.getCurrentUserRole() == 'nehmer') {
+  <p class="text-gray-500 text-sm italic m-4">Keine Nachrichten vorhanden</p>
 }

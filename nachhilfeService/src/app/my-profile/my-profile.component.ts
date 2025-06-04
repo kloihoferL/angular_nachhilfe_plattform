@@ -28,9 +28,7 @@ export class MyProfileComponent implements OnInit{
   bookings = signal<Booking[]>([]);
   offers = signal<Offer[]>([]);
   //offer = signal<Offer|undefined>(undefined);
-  activeTab: 'bookings' | 'offers' = 'offers'; // default tab
-
-
+  activeTab: 'bookings' | 'offers' = 'bookings'; // default auf booking setzen
 
   constructor(private bs:BookingStoreService, private os:OfferStoreService, public auth:AuthentificationService,
               private toastr:ToastrService, private router: Router) {
@@ -51,7 +49,7 @@ ngOnInit() {
           this.offers.update(current => current.filter(o => o.id !== id));
         },
         () => {
-          this.toastr.error('Das Angebot konnte nicht gelöscht werden');
+          this.toastr.error('Das Angebot konnte nicht gelöscht werden da es schonmal gebucht wurde');
         }
       );
     }

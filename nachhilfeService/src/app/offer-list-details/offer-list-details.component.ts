@@ -39,7 +39,7 @@ export class OfferListDetailsComponent implements OnInit {
 
   constructor(private os:OfferStoreService, private route:ActivatedRoute,
               private toastr:ToastrService, private router:Router,
-              private authService: AuthentificationService, private bs:BookingStoreService,
+              public authService: AuthentificationService, private bs:BookingStoreService,
               private as:AppointmentStoreService) {
 
   }
@@ -52,6 +52,12 @@ export class OfferListDetailsComponent implements OnInit {
   }
 
   openModal(){
+    if (!this.authService.isLoggedIn()) {
+      this.toastr.warning('Du musst eingeloggt sein, um eine Buchung vorzunehmen.');
+      this.router.navigate(['/login']); // optionaler Redirect
+      return;
+    }
+
       this.showModal.set(true);
   }
 
@@ -81,6 +87,7 @@ export class OfferListDetailsComponent implements OnInit {
     const payload:any = {
       giver_id: offer.giver.id,
       receiver_id: this.authService.getCurrentUserId(),
+      //receiver_id: offer.giver.id,
       offer_id: offer.id,
       slot_id: this.selectedSlot()?.id,
       course_id: offer.course.id,
@@ -94,6 +101,7 @@ export class OfferListDetailsComponent implements OnInit {
         this.toastr.success('Buchung erfolgreich!');
         //hier ist booked dann auf true setzen
         this.closeModal();
+        this.router.navigate(['/mein-account']);
       },
       error: (err) => {
         this.toastr.error('Fehler beim Buchen');
@@ -115,7 +123,7 @@ export class OfferListDetailsComponent implements OnInit {
 
     const AppointmentPayload: any = {
       offer_id: offer.id,
-      sender_id: 1,
+      sender_id: this.authService.getCurrentUserId(),
       receiver_id: offer.giver.id,
       requested_time: this.selectedAppointment(),
       message: this.messageText()

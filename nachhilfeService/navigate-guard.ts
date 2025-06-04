@@ -11,7 +11,12 @@ export const canNavigateToAdminGuard: CanActivateFn = (route, state) => {
     return true;
   }else{
     toastService.error('Sie müssen als Geber angemeldet sein, um auf diese Seite zuzugreifen');
-    router.navigate(['/login']);
+    if (authService.isLoggedIn()){
+      router.navigate(['/']);
+    }else{
+      router.navigate(['/login']);
+    }
+
     return false;
   }
 };

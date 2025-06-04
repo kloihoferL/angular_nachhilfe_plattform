@@ -1,18 +1,12 @@
-<p class="text-2xl font-bold mb-6 text-cyan-400 text-center">Alle Nachhilfeangebote</p>
+<p class="text-2xl font-bold mb-6 text-center my-4">Alle Nachhilfeangebote</p>
 
-
-@for (offer of offers(); track offer.id) {
-  <a class="app-offer-list-item" [offer]="offer" [routerLink]="offer.id">
-  </a>
+@if (!offers() && offers().length === 0) {
+  <p class="flex justify-center items-center text-gray-500">Keine Nachhilfeangebote verfügbar.</p>
 }
 
-@if (!offers()) {
-  <p>Loading...</p>
+@if (offers() && offers().length > 0) {
+  @for (offer of offers(); track offer.id) {
+    <a class="app-offer-list-item" [offer]="offer" [routerLink]="offer.id">
+    </a>
+  }
 }
-
-@if (offers().length === 0) {
-  <p class="text-gray-500 text-sm italic">Keine Angebote vorhanden</p>
-}
-
-
-
