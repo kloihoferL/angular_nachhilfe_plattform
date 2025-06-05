@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideAnimations(),
     provideToastr(),
-    {provide:LOCALE_ID, useValue:'de' }, //useValue: 'de' für Deutsch
+    {provide:LOCALE_ID, useValue:'de' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass:TokenInterceptorService,

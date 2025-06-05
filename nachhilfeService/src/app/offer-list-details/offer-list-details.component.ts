@@ -54,7 +54,7 @@ export class OfferListDetailsComponent implements OnInit {
   openModal(){
     if (!this.authService.isLoggedIn()) {
       this.toastr.warning('Du musst eingeloggt sein, um eine Buchung vorzunehmen.');
-      this.router.navigate(['/login']); // optionaler Redirect
+      this.router.navigate(['/login']);
       return;
     }
 
@@ -99,7 +99,6 @@ export class OfferListDetailsComponent implements OnInit {
     this.bs.create(payload).subscribe({
       next: () => {
         this.toastr.success('Buchung erfolgreich!');
-        //hier ist booked dann auf true setzen
         this.closeModal();
         this.router.navigate(['/mein-account']);
       },
@@ -133,7 +132,6 @@ export class OfferListDetailsComponent implements OnInit {
     this.as.create(AppointmentPayload).subscribe({
       next: () => {
         this.toastr.success('Terminvorschlag wurde an Geber geschickt! Dieser wird sich zeitnah melden.');
-        //hier ist booked dann auf true setzen
         this.closeModal();
       },
       error: (err) => {

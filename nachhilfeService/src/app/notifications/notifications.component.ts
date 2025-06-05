@@ -126,7 +126,7 @@ export class NotificationsComponent implements OnInit {
             this.as.acceptAppointment(id).subscribe({
               next: () => {
                 this.toastr.success('Der Termin wurde erfolgreich akzeptiert und eine Buchung erstellt');
-                this.loadPendingNotifications(); // Aktualisiere Liste der Notifications
+                this.loadPendingNotifications(); // Aktualisiere Liste Notifications
               },
               error: err => {
                 console.error('Fehler beim Akzeptieren des Termins:', err);
